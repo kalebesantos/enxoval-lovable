@@ -41,7 +41,7 @@ const Index = () => {
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter ? item.category === categoryFilter : true;
-    const matchesPurchased = showPurchased ? true : !item.isPurchased;
+    const matchesPurchased = showPurchased ? true : !item.is_purchased;
     
     return matchesSearch && matchesCategory && matchesPurchased;
   });
@@ -57,23 +57,23 @@ const Index = () => {
 
   // Statistics
   const totalItems = items.length;
-  const purchasedItems = items.filter(item => item.isPurchased).length;
+  const purchasedItems = items.filter(item => item.is_purchased).length;
 
-  const handleTogglePurchased = async (id: string, isPurchased: boolean, purchasedBy?: string) => {
+  const handleTogglePurchased = async (id: string, is_purchased: boolean, purchased_by?: string) => {
     try {
-      const updatedItem = await updateItemInDb(id, isPurchased, purchasedBy);
+      const updatedItem = await updateItemInDb(id, is_purchased, purchased_by);
       
       if (updatedItem) {
         // Update local state with the updated item
         setItems(prevItems => 
           prevItems.map(item => 
-            item.id === id ? { ...item, isPurchased, purchasedBy } : item
+            item.id === id ? { ...item, is_purchased, purchased_by } : item
           )
         );
         
-        if (isPurchased) {
+        if (is_purchased) {
           toast.success('Item marcado como comprado', {
-            description: `${purchasedBy ? `Comprado por ${purchasedBy}` : ''}`,
+            description: `${purchased_by ? `Comprado por ${purchased_by}` : ''}`,
           });
         }
       }

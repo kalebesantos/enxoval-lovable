@@ -16,14 +16,7 @@ export const getItems = async (): Promise<Item[]> => {
       return [];
     }
     
-    // Transform database fields to match our application's field names
-    return data.map(item => ({
-      id: item.id,
-      name: item.name,
-      category: item.category,
-      isPurchased: item.is_purchased,
-      purchasedBy: item.purchased_by
-    }));
+    return data as Item[];
   } catch (error) {
     console.error('Exception fetching items:', error);
     toast.error('Erro ao carregar os itens');
@@ -34,17 +27,9 @@ export const getItems = async (): Promise<Item[]> => {
 // Add a new item
 export const addItem = async (item: Omit<Item, 'id'>): Promise<Item | null> => {
   try {
-    // Transform field names to match database schema
-    const dbItem = {
-      name: item.name,
-      category: item.category,
-      is_purchased: item.isPurchased,
-      purchased_by: item.purchasedBy
-    };
-    
     const { data, error } = await supabase
       .from('items')
-      .insert(dbItem)
+      .insert(item)
       .select()
       .single();
     
@@ -54,14 +39,7 @@ export const addItem = async (item: Omit<Item, 'id'>): Promise<Item | null> => {
       return null;
     }
     
-    // Transform back to application field names
-    return {
-      id: data.id,
-      name: data.name,
-      category: data.category,
-      isPurchased: data.is_purchased,
-      purchasedBy: data.purchased_by
-    };
+    return data as Item;
   } catch (error) {
     console.error('Exception adding item:', error);
     toast.error('Erro ao adicionar o item');
@@ -72,14 +50,14 @@ export const addItem = async (item: Omit<Item, 'id'>): Promise<Item | null> => {
 // Update item purchase status
 export const updateItemPurchaseStatus = async (
   id: string, 
-  isPurchased: boolean, 
-  purchasedBy?: string
+  is_purchased: boolean, 
+  purchased_by?: string
 ): Promise<Item | null> => {
   try {
     const updateData = {
-      is_purchased: isPurchased,
-      purchased_by: isPurchased ? purchasedBy : null,
-      updated_at: new Date()
+      is_purchased,
+      purchased_by: is_purchased ? purchased_by : null,
+      updated_at: new Date().toISOString()
     };
     
     const { data, error } = await supabase
@@ -95,14 +73,7 @@ export const updateItemPurchaseStatus = async (
       return null;
     }
     
-    // Transform back to application field names
-    return {
-      id: data.id,
-      name: data.name,
-      category: data.category,
-      isPurchased: data.is_purchased,
-      purchasedBy: data.purchased_by
-    };
+    return data as Item;
   } catch (error) {
     console.error('Exception updating item:', error);
     toast.error('Erro ao atualizar o item');

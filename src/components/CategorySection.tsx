@@ -6,12 +6,12 @@ import { Item } from '../types';
 interface CategorySectionProps {
   category: string;
   items: Item[];
-  onTogglePurchased: (id: string, isPurchased: boolean, purchasedBy?: string) => void;
+  onTogglePurchased: (id: string, is_purchased: boolean, purchased_by?: string) => void;
 }
 
 const CategorySection = ({ category, items, onTogglePurchased }: CategorySectionProps) => {
   const totalItems = items.length;
-  const purchasedItems = items.filter(item => item.isPurchased).length;
+  const purchasedItems = items.filter(item => item.is_purchased).length;
   const percentage = totalItems > 0 ? Math.floor((purchasedItems / totalItems) * 100) : 0;
   
   return (

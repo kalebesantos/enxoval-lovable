@@ -26,7 +26,7 @@ const AddItemModal = ({ categories, onAddItem }: AddItemModalProps) => {
       onAddItem({
         name: name.trim(),
         category: selectedCategory.trim(),
-        isPurchased: false
+        is_purchased: false
       });
       setName('');
       setIsOpen(false);

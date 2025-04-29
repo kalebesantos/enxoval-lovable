@@ -5,15 +5,15 @@ import { Item } from '../types';
 
 interface ItemCardProps {
   item: Item;
-  onTogglePurchased: (id: string, isPurchased: boolean, purchasedBy?: string) => void;
+  onTogglePurchased: (id: string, is_purchased: boolean, purchased_by?: string) => void;
 }
 
 const ItemCard = ({ item, onTogglePurchased }: ItemCardProps) => {
-  const [purchasedBy, setPurchasedBy] = useState<string>(item.purchasedBy || '');
+  const [purchasedBy, setPurchasedBy] = useState<string>(item.purchased_by || '');
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleToggle = () => {
-    if (item.isPurchased) {
+    if (item.is_purchased) {
       onTogglePurchased(item.id, false);
     } else {
       setIsEditing(true);
@@ -34,21 +34,21 @@ const ItemCard = ({ item, onTogglePurchased }: ItemCardProps) => {
   };
 
   return (
-    <div className={`border rounded-md p-4 ${item.isPurchased ? 'bg-gray-50' : 'bg-white'} relative`}>
+    <div className={`border rounded-md p-4 ${item.is_purchased ? 'bg-gray-50' : 'bg-white'} relative`}>
       <div className="flex items-center justify-between">
-        <h3 className={`font-medium ${item.isPurchased ? 'text-gray-500' : 'text-gray-800'}`}>{item.name}</h3>
+        <h3 className={`font-medium ${item.is_purchased ? 'text-gray-500' : 'text-gray-800'}`}>{item.name}</h3>
         <div 
           onClick={isEditing ? undefined : handleToggle}
           className={`h-6 w-6 rounded-full border flex items-center justify-center cursor-pointer
-            ${item.isPurchased ? 'bg-green-600 border-green-600' : 'border-gray-300'}`}
+            ${item.is_purchased ? 'bg-green-600 border-green-600' : 'border-gray-300'}`}
         >
-          {item.isPurchased && <Check className="h-4 w-4 text-white" />}
+          {item.is_purchased && <Check className="h-4 w-4 text-white" />}
         </div>
       </div>
       
-      {item.isPurchased && item.purchasedBy && (
+      {item.is_purchased && item.purchased_by && (
         <div className="mt-1 text-xs text-gray-500">
-          Comprado por: {item.purchasedBy}
+          Comprado por: {item.purchased_by}
         </div>
       )}
 

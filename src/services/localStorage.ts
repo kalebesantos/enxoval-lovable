@@ -8,36 +8,36 @@ const generateId = (): string => {
 
 // Initial demo data
 const initialItems: Item[] = [
-  { id: generateId(), name: 'Bacias', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Kit Cochas', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Coador de Café', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Colheres de Medida', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Colheres de Pau', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Copo Medidor', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Cortador de Pizza', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Descascador de Legumes', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Escorredor de Arroz', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Escorredor de Louça e Talheres', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Escorredor de Macarrão', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Espremedor de Alho', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Espremedor de Limão', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Kit Facas', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Faqueiro', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Forma para Pizza', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Concha para Sorvete', category: 'Cozinha', isPurchased: false },
-  { id: generateId(), name: 'Cuscuzeira', category: 'Cozinha', isPurchased: false },
+  { id: generateId(), name: 'Bacias', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Kit Cochas', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Coador de Café', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Colheres de Medida', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Colheres de Pau', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Copo Medidor', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Cortador de Pizza', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Descascador de Legumes', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Escorredor de Arroz', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Escorredor de Louça e Talheres', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Escorredor de Macarrão', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Espremedor de Alho', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Espremedor de Limão', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Kit Facas', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Faqueiro', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Forma para Pizza', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Concha para Sorvete', category: 'Cozinha', is_purchased: false },
+  { id: generateId(), name: 'Cuscuzeira', category: 'Cozinha', is_purchased: false },
   
-  { id: generateId(), name: 'Sofá', category: 'Sala', isPurchased: false },
-  { id: generateId(), name: 'Mesa de Centro', category: 'Sala', isPurchased: false },
-  { id: generateId(), name: 'Rack para TV', category: 'Sala', isPurchased: false },
+  { id: generateId(), name: 'Sofá', category: 'Sala', is_purchased: false },
+  { id: generateId(), name: 'Mesa de Centro', category: 'Sala', is_purchased: false },
+  { id: generateId(), name: 'Rack para TV', category: 'Sala', is_purchased: false },
   
-  { id: generateId(), name: 'Cama Box', category: 'Quarto', isPurchased: false },
-  { id: generateId(), name: 'Guarda-Roupa', category: 'Quarto', isPurchased: false },
-  { id: generateId(), name: 'Cabeceira', category: 'Quarto', isPurchased: false },
+  { id: generateId(), name: 'Cama Box', category: 'Quarto', is_purchased: false },
+  { id: generateId(), name: 'Guarda-Roupa', category: 'Quarto', is_purchased: false },
+  { id: generateId(), name: 'Cabeceira', category: 'Quarto', is_purchased: false },
   
-  { id: generateId(), name: 'Box para Banheiro', category: 'Banheiro', isPurchased: false },
-  { id: generateId(), name: 'Chuveiro', category: 'Banheiro', isPurchased: false },
-  { id: generateId(), name: 'Tapete', category: 'Banheiro', isPurchased: false },
+  { id: generateId(), name: 'Box para Banheiro', category: 'Banheiro', is_purchased: false },
+  { id: generateId(), name: 'Chuveiro', category: 'Banheiro', is_purchased: false },
+  { id: generateId(), name: 'Tapete', category: 'Banheiro', is_purchased: false },
 ];
 
 // Get items from localStorage or use initial data
@@ -69,16 +69,16 @@ export const addItem = (item: Omit<Item, 'id'>): Item => {
 // Toggle item purchase status
 export const updateItemPurchaseStatus = (
   id: string, 
-  isPurchased: boolean, 
-  purchasedBy?: string
+  is_purchased: boolean, 
+  purchased_by?: string
 ): Item[] => {
   const items = getItems();
   const updatedItems = items.map(item => {
     if (item.id === id) {
       return {
         ...item,
-        isPurchased,
-        purchasedBy: isPurchased ? purchasedBy || item.purchasedBy : undefined
+        is_purchased,
+        purchased_by: is_purchased ? purchased_by || item.purchased_by : undefined
       };
     }
     return item;
