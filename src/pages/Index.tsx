@@ -7,18 +7,31 @@ import SearchBar from '../components/SearchBar';
 import CategorySection from '../components/CategorySection';
 import AddItemModal from '../components/AddItemModal';
 import { Item } from '../types';
-import { getItems, addItem as addItemToStorage, updateItemPurchaseStatus } from '../services/localStorage';
+import { getItems, addItem as addItemToDb, updateItemPurchaseStatus as updateItemInDb } from '../services/supabaseService';
 
 const Index = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showPurchased, setShowPurchased] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load items on component mount
-    const loadedItems = getItems();
-    setItems(loadedItems);
+    // Load items from Supabase on component mount
+    const loadItems = async () => {
+      setIsLoading(true);
+      try {
+        const loadedItems = await getItems();
+        setItems(loadedItems);
+      } catch (error) {
+        console.error('Failed to load items:', error);
+        toast.error('Falha ao carregar os itens');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadItems();
   }, []);
 
   // Get unique categories
@@ -46,22 +59,53 @@ const Index = () => {
   const totalItems = items.length;
   const purchasedItems = items.filter(item => item.isPurchased).length;
 
-  const handleTogglePurchased = (id: string, isPurchased: boolean, purchasedBy?: string) => {
-    const updatedItems = updateItemPurchaseStatus(id, isPurchased, purchasedBy);
-    setItems(updatedItems);
-    
-    if (isPurchased) {
-      toast.success('Item marcado como comprado', {
-        description: `${purchasedBy ? `Comprado por ${purchasedBy}` : ''}`,
-      });
+  const handleTogglePurchased = async (id: string, isPurchased: boolean, purchasedBy?: string) => {
+    try {
+      const updatedItem = await updateItemInDb(id, isPurchased, purchasedBy);
+      
+      if (updatedItem) {
+        // Update local state with the updated item
+        setItems(prevItems => 
+          prevItems.map(item => 
+            item.id === id ? { ...item, isPurchased, purchasedBy } : item
+          )
+        );
+        
+        if (isPurchased) {
+          toast.success('Item marcado como comprado', {
+            description: `${purchasedBy ? `Comprado por ${purchasedBy}` : ''}`,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update item:', error);
+      toast.error('Falha ao atualizar o item');
     }
   };
 
-  const handleAddItem = (newItem: Omit<Item, 'id'>) => {
-    const item = addItemToStorage(newItem);
-    setItems(prev => [...prev, item]);
-    toast.success('Item adicionado com sucesso');
+  const handleAddItem = async (newItem: Omit<Item, 'id'>) => {
+    try {
+      const item = await addItemToDb(newItem);
+      if (item) {
+        setItems(prev => [...prev, item]);
+        toast.success('Item adicionado com sucesso');
+      }
+    } catch (error) {
+      console.error('Failed to add item:', error);
+      toast.error('Falha ao adicionar o item');
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+          <p className="mt-2 text-gray-600">Carregando itens...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
