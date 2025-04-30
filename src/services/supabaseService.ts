@@ -80,3 +80,26 @@ export const updateItemPurchaseStatus = async (
     return null;
   }
 };
+
+// Delete item
+export const deleteItem = async (id: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from('items')
+      .delete()
+      .eq('id', id);
+    
+    if (error) {
+      console.error('Error deleting item:', error);
+      toast.error('Erro ao excluir o item');
+      return false;
+    }
+    
+    toast.success('Item excluído com sucesso');
+    return true;
+  } catch (error) {
+    console.error('Exception deleting item:', error);
+    toast.error('Erro ao excluir o item');
+    return false;
+  }
+};

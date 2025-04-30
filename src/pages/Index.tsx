@@ -7,7 +7,8 @@ import SearchBar from '../components/SearchBar';
 import CategorySection from '../components/CategorySection';
 import AddItemModal from '../components/AddItemModal';
 import { Item } from '../types';
-import { getItems, addItem as addItemToDb, updateItemPurchaseStatus as updateItemInDb } from '../services/supabaseService';
+import { getItems, addItem as addItemToDb, updateItemPurchaseStatus as updateItemInDb, deleteItem as deleteItemFromDb } from '../services/supabaseService';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const Index = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -15,6 +16,7 @@ const Index = () => {
   const [showPurchased, setShowPurchased] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Load items from Supabase on component mount
@@ -95,6 +97,19 @@ const Index = () => {
       toast.error('Falha ao adicionar o item');
     }
   };
+  
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const success = await deleteItemFromDb(id);
+      
+      if (success) {
+        setItems(prevItems => prevItems.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      console.error('Failed to delete item:', error);
+      toast.error('Falha ao excluir o item');
+    }
+  };
 
   if (isLoading) {
     return (
@@ -110,7 +125,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="mb-6">
           <ProgressBar total={totalItems} purchased={purchasedItems} />
         </div>
@@ -132,6 +147,7 @@ const Index = () => {
               category={category}
               items={categoryItems}
               onTogglePurchased={handleTogglePurchased}
+              onDeleteItem={handleDeleteItem}
             />
           ))
         ) : (
