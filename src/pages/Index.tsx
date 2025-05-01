@@ -9,6 +9,7 @@ import AddItemModal from '../components/AddItemModal';
 import { Item } from '../types';
 import { getItems, addItem as addItemToDb, updateItemPurchaseStatus as updateItemInDb, deleteItem as deleteItemFromDb } from '../services/supabaseService';
 import { useIsMobile } from '../hooks/use-mobile';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -161,6 +162,8 @@ const Index = () => {
       </main>
     </div>
   );
+
+<Footer className="mt-12 sm:mt-14 md:mt-16 py-4 sm:py-5 md:py-6 text-center text-purple-700" />
 };
 
 export default Index;
